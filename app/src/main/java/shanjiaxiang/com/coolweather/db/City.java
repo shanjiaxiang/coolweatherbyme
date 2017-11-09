@@ -5,7 +5,7 @@ import org.litepal.crud.DataSupport;
 /**
  * Created by 单加响 on 2017/11/2.
  */
-//dijishi 
+//改为中文哦
 public class City extends DataSupport {
     private int id  ;
     private String cityName;
