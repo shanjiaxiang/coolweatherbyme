@@ -2,6 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="25sp">
+    <Button
+        android:id="@+id/nav_button"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/icon_szss"
+        android:layout_width="20dp"
+        android:layout_height="20dp"/>
     <TextView
         android:id="@+id/title_city"
         android:layout_centerInParent="true"

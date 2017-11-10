@@ -4,12 +4,15 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -22,6 +25,9 @@ import com.bumptech.glide.util.Util;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.SimpleFormatter;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,6 +51,8 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView sportText;
     private ImageView bingPicImg;
     public SwipeRefreshLayout swipeRefresh;
+    public DrawerLayout drawerLayout;
+    public Button navButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +81,14 @@ public class WeatherActivity extends AppCompatActivity {
         bingPicImg = (ImageView)findViewById(R.id.bing_pic_img);
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        navButton = (Button)findViewById(R.id.nav_button);
+        navButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather",null);
         final String weatherId;
@@ -95,12 +111,16 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this);
+                String weatherString = prefs.getString("weather",null);
+                Weather weather = Utility.handleWeatherResponse(weatherString);
+                String weatherId = weather.basic.weatherId;
+                //Toast.makeText(WeatherActivity.this,"weatherId:  "+weatherId,Toast.LENGTH_SHORT).show();
                 requestWeather(weatherId);
             }
         });
-
     }
-    private void requestWeather(final String weatherId){
+    public void requestWeather(final String weatherId){
         String weatherUrl = "https://free-api.heweather.com/v5/weather?city="
                 +weatherId +"&key=ef9ebd5952c540358be759e7768404a5";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
@@ -149,6 +169,13 @@ public class WeatherActivity extends AppCompatActivity {
         String degree = weather.now.temperature;
         String weatherInfo =weather.now.more.info;
         titleCity.setText(cityName);
+        //获取系统当前时间
+//        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+//        Date curDate = new Date(System.currentTimeMillis());
+//        String curTime = formatter.format(curDate);
+//        titleUpdateTime.setText(curTime);
+
+
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree+"°C");
         weatherInfoText.setText(weatherInfo);
