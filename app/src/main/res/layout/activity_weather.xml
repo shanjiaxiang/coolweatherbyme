@@ -35,11 +35,12 @@
                 </LinearLayout>
             </ScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
-        <fragment
-            android:id="@+id/choose_area_frament"
-            android:name="shanjiaxiang.com.coolweather.ChooseAreaFragment"
+        <FrameLayout
+            android:id="@+id/frame_layout"
             android:layout_gravity="start"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+        </FrameLayout>
+
     </android.support.v4.widget.DrawerLayout>
 </FrameLayout>
